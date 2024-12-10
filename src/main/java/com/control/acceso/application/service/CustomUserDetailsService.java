@@ -25,24 +25,35 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        logger.info("Attempting to load user by email: {}", email);
-        
-        Usuario usuario = usuarioManagementUseCase.obtenerUsuarioPorEmail(email);
-        if (usuario == null) {
-            logger.error("User not found with email: {}", email);
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
+        try {
+            logger.info("Attempting to load user by email: {}", email);
+            
+            Usuario usuario = usuarioManagementUseCase.obtenerUsuarioPorEmail(email);
+            if (usuario == null) {
+                logger.error("User not found with email: {}", email);
+                throw new UsernameNotFoundException("User not found with email: " + email);
+            }
 
-        logger.info("User found: email={}, role={}", usuario.getEmail(), usuario.getRole());
-        
-        UserDetails userDetails = User.builder()
-                .username(usuario.getEmail())
-                .password(usuario.getPassword())
-                .roles(usuario.getRole().name())
-                .build();
-                
-        logger.info("UserDetails created successfully for user: {}", email);
-        
-        return userDetails;
+            logger.info("User found: email={}, role={}, password={}", 
+                usuario.getEmail(), 
+                usuario.getRole(),
+                usuario.getPassword() != null ? "present" : "null");
+            
+            UserDetails userDetails = User.builder()
+                    .username(usuario.getEmail())
+                    .password(usuario.getPassword())
+                    .roles(usuario.getRole().name())
+                    .build();
+                    
+            logger.info("UserDetails created successfully for user: {}, with roles: {}, password hash: {}", 
+                email, 
+                userDetails.getAuthorities(),
+                userDetails.getPassword());
+            
+            return userDetails;
+        } catch (Exception e) {
+            logger.error("Error loading user by email: {}", email, e);
+            throw e;
+        }
     }
 }

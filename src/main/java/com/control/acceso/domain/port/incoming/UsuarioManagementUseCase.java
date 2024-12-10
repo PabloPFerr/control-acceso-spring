@@ -5,10 +5,10 @@ import java.util.List;
 
 public interface UsuarioManagementUseCase {
     Usuario obtenerUsuarioPorEmail(String email);
-    Usuario obtenerUsuarioPorId(Long id);
-    List<Usuario> obtenerTodosLosUsuarios();
+    boolean existeUsuarioPorEmail(String email);
     Usuario crearUsuario(Usuario usuario);
     Usuario actualizarUsuario(Usuario usuario);
+    Usuario obtenerUsuarioPorId(Long id);
+    List<Usuario> obtenerTodosLosUsuarios();
     void eliminarUsuario(Long id);
-    boolean existeUsuarioPorEmail(String email);
 }

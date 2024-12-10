@@ -8,24 +8,24 @@ import java.time.Duration;
 @Data
 public class RegistroDTO {
     private Long id;
-    private String usuario;
+    private Long usuarioId;
+    private String nombreUsuario;
     private LocalDateTime horaEntrada;
     private LocalDateTime horaSalida;
     private String tipoRegistro;
-    private String duracion;
+    private Double duracion;
 
     public static RegistroDTO fromRegistro(Registro registro) {
         RegistroDTO dto = new RegistroDTO();
         dto.setId(registro.getId());
-        dto.setUsuario(registro.getUsuario().getNombre());
+        dto.setUsuarioId(registro.getUsuario().getId());
+        dto.setNombreUsuario(registro.getUsuario().getNombre());
         dto.setHoraEntrada(registro.getHoraEntrada());
         dto.setHoraSalida(registro.getHoraSalida());
         
         if (registro.getHoraSalida() != null) {
-            Duration duration = Duration.between(registro.getHoraEntrada(), registro.getHoraSalida());
-            long horas = duration.toHours();
-            long minutos = duration.toMinutesPart();
-            dto.setDuracion(String.format("%d horas %d minutos", horas, minutos));
+            double horas = Duration.between(registro.getHoraEntrada(), registro.getHoraSalida()).toMinutes() / 60.0;
+            dto.setDuracion(Math.round(horas * 100.0) / 100.0);
         }
         
         dto.setTipoRegistro(registro.getTipoRegistro().toString());

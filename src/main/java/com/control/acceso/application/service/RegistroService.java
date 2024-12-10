@@ -7,6 +7,7 @@ import com.control.acceso.domain.port.outgoing.RegistroRepositoryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -116,5 +117,19 @@ public class RegistroService implements RegistroManagementUseCase {
     @Override
     public Registro actualizarRegistro(Registro registro) {
         return registroRepository.save(registro);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Registro> obtenerRegistrosPorUsuarioYFechas(Long usuarioId, LocalDate fechaInicio, LocalDate fechaFin) {
+        LocalDateTime inicio = fechaInicio.atStartOfDay();
+        LocalDateTime fin = fechaFin.plusDays(1).atStartOfDay();
+        return registroRepository.findByUsuarioIdAndHoraEntradaBetween(usuarioId, inicio, fin);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Registro> obtenerRegistrosPorFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        LocalDateTime inicio = fechaInicio.atStartOfDay();
+        LocalDateTime fin = fechaFin.plusDays(1).atStartOfDay();
+        return registroRepository.findByHoraEntradaBetween(inicio, fin);
     }
 }

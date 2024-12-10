@@ -18,30 +18,44 @@ public class DataInitializer {
     CommandLineRunner initDatabase(UsuarioManagementUseCase usuarioManagementUseCase, PasswordEncoder passwordEncoder) {
         return args -> {
             logger.info("Initializing database...");
-            if (!usuarioManagementUseCase.existeUsuarioPorEmail("admin@example.com")) {
-                logger.info("No admin user found. Creating default admin user.");
-                Usuario admin = new Usuario();
-                admin.setNombre("Admin");
-                admin.setEmail("admin@example.com");
-                admin.setPassword(passwordEncoder.encode("admin123"));
-                admin.setRole(Usuario.Role.ADMIN);
-                usuarioManagementUseCase.crearUsuario(admin);
-                logger.info("Default admin user created successfully with email: {} and role: {}", 
-                    admin.getEmail(), admin.getRole());
-                
-                // Verificar que el usuario se guardó correctamente
-                Usuario saved = usuarioManagementUseCase.obtenerUsuarioPorEmail("admin@example.com");
-                if (saved != null) {
-                    logger.info("Verified: Admin user exists in database with email: {} and role: {}", 
-                        saved.getEmail(), saved.getRole());
+            
+            String adminEmail = "admin@example.com";
+            String adminPassword = "admin123";
+            
+            try {
+                if (!usuarioManagementUseCase.existeUsuarioPorEmail(adminEmail)) {
+                    logger.info("No admin user found. Creating default admin user.");
+                    Usuario admin = new Usuario();
+                    admin.setNombre("Admin");
+                    admin.setEmail(adminEmail);
+                    String hashedPassword = passwordEncoder.encode(adminPassword);
+                    logger.info("Created hashed password for admin: {}", hashedPassword);
+                    admin.setPassword(hashedPassword);
+                    admin.setRole(Usuario.Role.ADMIN);
+                    usuarioManagementUseCase.crearUsuario(admin);
+                    logger.info("Default admin user created successfully with email: {} and role: {}", 
+                        admin.getEmail(), admin.getRole());
+                } else {
+                    // Si el usuario existe, actualizamos su contraseña
+                    logger.info("Admin user exists. Updating password if necessary...");
+                    Usuario admin = usuarioManagementUseCase.obtenerUsuarioPorEmail(adminEmail);
+                    
+                    // Solo actualizamos si la contraseña ha cambiado
+                    if (!passwordEncoder.matches(adminPassword, admin.getPassword())) {
+                        String hashedPassword = passwordEncoder.encode(adminPassword);
+                        logger.info("Updating admin password. New hash: {}", hashedPassword);
+                        admin.setPassword(hashedPassword);
+                        usuarioManagementUseCase.actualizarUsuario(admin);
+                        logger.info("Admin password updated successfully");
+                    } else {
+                        logger.info("Admin password is already up to date");
+                    }
                 }
-            } else {
-                logger.info("Admin user already exists. Current admin details:");
-                Usuario existing = usuarioManagementUseCase.obtenerUsuarioPorEmail("admin@example.com");
-                if (existing != null) {
-                    logger.info("Email: {}, Role: {}", existing.getEmail(), existing.getRole());
-                }
+            } catch (Exception e) {
+                logger.error("Error during database initialization", e);
+                throw e;
             }
+            
             logger.info("Database initialization complete.");
         };
     }

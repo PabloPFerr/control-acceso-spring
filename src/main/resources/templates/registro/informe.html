@@ -49,7 +49,7 @@
                                 </thead>
                                 <tbody>
                                     <tr th:each="registro : ${registros}">
-                                        <td th:text="${registro.usuario.nombre + ' ' + registro.usuario.apellidos}">Nombre</td>
+                                        <td th:text="${registro.nombreUsuario}">Nombre</td>
                                         <td th:text="${#temporals.format(registro.horaEntrada, 'dd/MM/yyyy')}">Fecha</td>
                                         <td th:text="${#temporals.format(registro.horaEntrada, 'HH:mm')}">Entrada</td>
                                         <td th:text="${registro.horaSalida != null ? #temporals.format(registro.horaSalida, 'HH:mm') : '-'}">Salida</td>

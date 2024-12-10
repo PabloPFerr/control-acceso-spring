@@ -16,4 +16,8 @@ public interface RegistroRepositoryPort {
     boolean existsByUsuarioAndHoraSalidaIsNull(Usuario usuario);
     List<Registro> findAll();
     List<Registro> findByUsuarioAndHoraEntradaBetween(Usuario usuario, LocalDateTime inicio, LocalDateTime fin);
+    Optional<Registro> findById(Long id);
+    Optional<Registro> findActiveByUsuarioId(Long usuarioId);
+    List<Registro> findByUsuarioIdAndHoraEntradaBetween(Long usuarioId, LocalDateTime inicio, LocalDateTime fin);
+    void deleteById(Long id);
 }

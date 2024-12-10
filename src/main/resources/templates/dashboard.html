@@ -18,6 +18,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/dashboard">Dashboard</a>
                     </li>
+                    <li class="nav-item" sec:authorize="hasRole('EMPLEADO')">
+                        <a class="nav-link" href="/reportes">Mis Reportes</a>
+                    </li>
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link" href="/dashboard/admin">Admin Panel</a>
                     </li>
@@ -41,7 +44,7 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <form th:action="@{/dashboard/registro}" method="post">
+                            <form th:action="@{/dashboard/entrada}" method="post">
                                 <button type="submit" class="btn btn-success">Registrar Entrada</button>
                             </form>
                             <form th:action="@{/dashboard/salida}" method="post">
@@ -91,10 +94,7 @@
                                         <td th:text="${registro.duracion ?: '-'}"></td>
                                         <td>
                                             <span th:if="${registro.horaSalida == null}" class="badge bg-success">Activo</span>
-                                            <span th:unless="${registro.horaSalida == null}" 
-                                                  th:class="${registro.tipoRegistro == 'MANUAL' ? 'badge bg-secondary' : 'badge bg-warning'}"
-                                                  th:text="${registro.tipoRegistro == 'MANUAL' ? 'Completado' : 'Cierre Automático'}">
-                                            </span>
+                                            <span th:unless="${registro.horaSalida == null}" class="badge bg-secondary">Completado</span>
                                         </td>
                                     </tr>
                                 </tbody>
