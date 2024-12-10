@@ -1,0 +1,66 @@
+package com.control.acceso.interfaces.web;
+
+import com.control.acceso.application.service.RegistroService;
+import com.control.acceso.application.service.UsuarioService;
+import com.control.acceso.domain.model.Usuario;
+import com.control.acceso.domain.model.Registro;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/dashboard")
+public class DashboardController {
+
+    private final UsuarioService usuarioService;
+    private final RegistroService registroService;
+
+    @Autowired
+    public DashboardController(UsuarioService usuarioService, RegistroService registroService) {
+        this.usuarioService = usuarioService;
+        this.registroService = registroService;
+    }
+
+    @GetMapping("")
+    public String dashboard(Model model) {
+        Usuario usuario = obtenerUsuarioActual();
+        List<Registro> registros = registroService.obtenerRegistrosRecientes(usuario);
+        
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("registros", registros);
+        
+        if (usuario.getRole() == Usuario.Role.ADMIN) {
+            return "admin/dashboard";
+        }
+        
+        return "dashboard";
+    }
+
+    @GetMapping("/admin")
+    public String adminDashboard(Model model) {
+        Usuario usuario = obtenerUsuarioActual();
+        
+        if (usuario.getRole() != Usuario.Role.ADMIN) {
+            return "redirect:/dashboard";
+        }
+        
+        List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
+        List<Registro> registrosHoy = registroService.obtenerRegistrosDeHoy();
+        
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("registros", registrosHoy);
+        
+        return "admin/dashboard";
+    }
+
+    private Usuario obtenerUsuarioActual() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return usuarioService.obtenerUsuarioPorEmail(auth.getName());
+    }
+}

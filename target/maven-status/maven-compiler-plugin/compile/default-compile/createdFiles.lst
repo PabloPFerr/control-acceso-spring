@@ -1,0 +1,8 @@
+com/control/acceso/domain/model/Registro$TipoRegistro.class
+com/control/acceso/infrastructure/config/SecurityConfig.class
+com/control/acceso/domain/model/Usuario$Role.class
+com/control/acceso/domain/model/Registro.class
+com/control/acceso/ControlAccesoApplication.class
+com/control/acceso/infrastructure/repository/UsuarioRepository.class
+com/control/acceso/application/service/UsuarioService.class
+com/control/acceso/domain/model/Usuario.class
