@@ -139,12 +139,9 @@ Para contribuir al proyecto:
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## Licencia
-
-[Especificar la licencia del proyecto]
 
 ## Contacto
 
-[Tu nombre o el del equipo] - [email]
+Pablo Pérez Ferreira - pablo.p.ferreira@gmail.com
 
-Link del proyecto: [URL_DEL_REPOSITORIO]
+Link del proyecto: [https://github.com/PabloPFerr/control-acceso-spring)](https://github.com/PabloPFerr/control-acceso-spring)
