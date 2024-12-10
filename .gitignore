@@ -88,3 +88,34 @@ yarn-error.log*
 *.log
 *.sql
 *.sqlite
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Spring Boot
+*.log
+*.gz
+/logs/
+
+# IDE - IntelliJ IDEA
+*.iws
+*.iml
+*.ipr
+
+# IDE - Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IDE - VS Code
+.vscode/
+
+# Operating System
+Thumbs.db

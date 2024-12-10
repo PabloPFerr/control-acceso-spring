@@ -92,7 +92,7 @@ public class ReporteController {
 
         model.addAttribute("reporte", reporte);
         model.addAttribute("usuarios", usuarios);
-        model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("usuarioId", usuarioId != null ? usuarioId : usuarioActual.getId());
         model.addAttribute("fechaInicio", fechaInicio);
         model.addAttribute("fechaFin", fechaFin);
         model.addAttribute("esAdmin", true);
