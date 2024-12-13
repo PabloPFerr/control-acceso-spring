@@ -1,6 +1,6 @@
 # Sistema de Control de Acceso Horario
 
-Este proyecto es un sistema de control de acceso horario desarrollado con Spring Boot que permite gestionar y monitorizar los accesos y horarios en una organización.
+Este proyecto es un sistema de control de acceso horario laboral desarrollado con Spring Boot que permite gestionar y monitorizar los accesos y horarios en una organización.
 
 ## Requisitos Previos
 
